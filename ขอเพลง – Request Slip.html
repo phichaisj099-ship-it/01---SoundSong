@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ขอเพลง – Request Slip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500&family=Noto+Sans+Thai:wght@400;500;600&display=swap">
+<style data-file="css/style.css">
+:root{
+  --bg:#f3ece0;--surface:#fffaf0;--line:#d9ccb6;--ink:#2a1f3d;--muted:#6f6285;
+  --accent:#d6335a;--accent-ink:#fff;--ok:#18816b;--warn:#a8650a;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a1330;--surface:#271d44;--line:#3d3160;--ink:#f6eddc;--muted:#b4a7cf;
+  --accent:#ff7a96;--accent-ink:#2a0d18;--ok:#62d6b9;--warn:#ffc064;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1330;--surface:#271d44;--line:#3d3160;--ink:#f6eddc;--muted:#b4a7cf;--accent:#ff7a96;--accent-ink:#2a0d18;--ok:#62d6b9;--warn:#ffc064;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Noto Sans Thai",system-ui,sans-serif;min-height:100vh}
+h1,h2,.display{font-family:"Mitr","Noto Sans Thai",sans-serif;font-weight:500;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 96px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+header.top h1{font-size:1.5rem}
+.venue{color:var(--muted);font-size:.9rem}
+.tabs{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:none;padding:10px;border-radius:999px;font-weight:600;color:var(--muted);min-height:44px}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.row{display:flex;gap:8px;align-items:center}
+.field{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;min-height:46px}
+select.field{width:auto}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px}
+.chip{flex:none;border:1px solid var(--line);background:none;border-radius:999px;padding:6px 14px;color:var(--muted);min-height:36px}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--surface)}
+.closed{background:var(--surface);border:1px dashed var(--warn);color:var(--warn);padding:12px 14px;border-radius:12px;margin:10px 0}
+.song{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.song .t{flex:1;min-width:0}
+.song b{display:block;font-weight:600;overflow-wrap:anywhere}
+.song small{color:var(--muted)}
+.btn{border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-weight:600;padding:10px 16px;min-height:44px}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.sec{margin-top:26px}
+.sec h2{font-size:1.15rem;margin-bottom:8px}
+.slip{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:6px 14px 14px 6px;padding:12px 14px;margin-bottom:10px}
+.slip .meta{color:var(--muted);font-size:.88rem}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.82rem;font-weight:600;border:1px solid currentColor}
+.b-pending{color:var(--warn)}.b-accepted{color:var(--ok)}.b-played{color:var(--muted)}.b-skipped{color:var(--muted)}
+/* musician */
+.now{background:var(--accent);color:var(--accent-ink);border-radius:18px;padding:18px;margin-bottom:16px}
+.now .display{font-size:clamp(1.8rem,7vw,2.8rem);line-height:1.15;overflow-wrap:anywhere}
+.now .meta{opacity:.85}
+.q-item{display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.q-item .display{font-size:1.5rem;line-height:1.2;overflow-wrap:anywhere}
+.q-item .meta{color:var(--muted)}
+.q-item .acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.q-item .acts .btn{font-size:1.05rem;min-height:52px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:16px}
+.switch{display:flex;align-items:center;gap:10px;font-weight:600}
+.switch input{width:22px;height:22px;accent-color:var(--accent)}
+.empty{color:var(--muted);padding:18px 4px}
+/* sheet */
+dialog{border:0;padding:0;background:none;max-width:none;width:100%;margin:auto 0 0;color:var(--ink)}
+dialog::backdrop{background:rgba(10,5,25,.6)}
+.sheet{background:var(--bg);border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px));max-width:720px;margin:0 auto;border:1px solid var(--line)}
+.sheet label{display:block;margin:12px 0 4px;font-weight:600}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;z-index:10}
+.hidden{display:none!important}
+.vlabel{display:block;margin:12px 0 4px;font-weight:600}
+.qrgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:10px}
+.qrcard{background:#fff;color:#000;padding:10px;border-radius:12px;text-align:center}
+.qrcard>div{display:flex;justify-content:center}
+.qrcard b{display:block;margin-top:6px}
+.tqr{display:flex;justify-content:center;background:#fff;padding:10px;border-radius:12px;margin:12px 0}
+.tqr:empty{display:none}
+.chips.tips .chip{min-height:44px;padding:8px 18px;font-weight:600;color:var(--ink)}
+ol{padding-left:22px}
+@media print{header.top,.tabs,#view-v>section:not(.qrsec){display:none!important}body{background:#fff}.qrcard{break-inside:avoid;border:1px solid #000}}
+.chordprev{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.05rem;white-space:pre-wrap;margin-top:6px;opacity:.9}
+.notes-sheet{max-height:92vh;overflow:auto}
+.notes-sheet textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.1rem;line-height:1.5;resize:vertical}
+.notes-sheet .links{display:flex;gap:16px;flex-wrap:wrap;margin:6px 0}
+.notes-sheet a{color:var(--accent);font-weight:600}
+.hint{color:var(--muted);font-size:.88rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>ขอเพลง</h1><div class="venue" id="band">ร้านตัวอย่าง · วงเริ่มเล่นทุกคืน 20:30</div></div>
+    <div class="venue" id="who"></div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-c" aria-selected="true">ลูกค้า</button>
+    <button role="tab" id="tab-m" aria-selected="false">นักดนตรี</button>
+    <button role="tab" id="tab-v" aria-selected="false">ร้าน</button>
+  </div>
+
+  <!-- Customer -->
+  <main id="view-c">
+    <div class="row">
+      <label for="tableSel" class="venue">โต๊ะของคุณ</label>
+      <select id="tableSel" class="field"></select>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <input id="q" class="field" type="search" placeholder="ค้นหาชื่อเพลงหรือศิลปิน" aria-label="ค้นหาเพลง">
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="closedBanner" class="closed hidden">วงปิดรับคำขอชั่วคราว ลองใหม่อีกครั้งหลังจบเซ็ตนี้</div>
+    <div id="songs"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" id="custom">ไม่เจอเพลงที่อยากฟัง? พิมพ์ชื่อเอง</button>
+    </div>
+    <section class="sec">
+      <h2>คำขอของโต๊ะนี้</h2>
+      <div id="mine"></div></section><section class="sec"><h2>คิวของร้านตอนนี้ (โหวตเพลงที่อยากฟัง)</h2><div id="board"></div>
+    </section>
+  </main>
+
+  <!-- Musician -->
+  <main id="view-m" class="hidden">
+    <div class="toolbar">
+      <label class="switch"><input type="checkbox" id="accepting" checked> เปิดรับคำขอ</label>
+      <label class="switch"><input type="checkbox" id="onBreak"> โหมดพัก</label>
+      <div class="row">
+        <label for="limitSel" class="venue">จำกัดต่อโต๊ะ</label>
+        <select id="limitSel" class="field"><option>1</option><option>2</option><option selected>3</option><option>5</option></select>
+      </div>
+      <button class="btn ghost" id="sim">จำลองคำขอใหม่</button>
+    </div>
+    <div id="now"></div>
+    <section><h2 class="display" style="font-size:1.2rem;margin-bottom:10px">คิวถัดไป <span id="count" class="venue"></span></h2><div id="queue"></div></section>
+    <section class="sec"><h2>เล่นแล้ว / ข้าม</h2><div id="done"></div></section>
+    <section class="sec"><h2>สรุปคืนนี้</h2><div id="sum"></div></section>
+  </main>
+  <main id="view-v" class="hidden">
+    <section><h2>ข้อมูลวงและการรับทิป</h2>
+      <label class="vlabel" for="sBand">ชื่อวง</label><input id="sBand" class="field" maxlength="40">
+      <label class="vlabel" for="sIg">Instagram</label><input id="sIg" class="field" maxlength="40" placeholder="@ชื่อวง">
+      <label class="vlabel" for="sPP">PromptPay (เบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน 13 หลัก)</label><input id="sPP" class="field" inputmode="numeric" maxlength="13">
+      <label class="vlabel" for="sMin">ทิปขั้นต่ำที่ขึ้นคิวด่วน (บาท, 0 = ปิด)</label><input id="sMin" class="field" type="number" min="0">
+      <label class="vlabel" for="sBreak">ข้อความโหมดพัก</label><input id="sBreak" class="field" maxlength="80">
+      <p class="hint">เงินทิปเข้าบัญชีวงโดยตรงผ่านแอปธนาคาร เว็บนี้ไม่ได้ตรวจการโอน ยอดทิปที่แสดงคือยอดที่ลูกค้ากด “โอนแล้ว”</p>
+    </section>
+    <section class="sec"><h2>เพลงในลิสต์</h2>
+      <div class="row"><input id="xT" class="field" placeholder="ชื่อเพลง" maxlength="80" aria-label="ชื่อเพลง"><input id="xA" class="field" placeholder="ศิลปิน" maxlength="60" aria-label="ศิลปิน"></div>
+      <div class="row" style="margin-top:8px"><select id="xL" class="field" aria-label="ภาษา"><option>ไทย</option><option>สากล</option></select><select id="xG" class="field" aria-label="แนว"><option>ป๊อป</option><option>ร็อก</option><option>แจ๊ส</option><option>บัลลาด</option><option>โฟล์ก</option></select><button class="btn" id="addSong">เพิ่ม</button></div>
+      <div id="extras"></div>
+    </section>
+    <section class="sec"><h2>เพลงยอดนิยมคืนนี้</h2><div id="top"></div></section>
+    <section class="sec qrsec"><h2>QR ต่อโต๊ะ</h2>
+      <label class="vlabel" for="base">ที่อยู่เว็บจริงของร้าน (ใส่หลังนำขึ้นโฮสต์)</label><input id="base" class="field">
+      <div class="row" style="margin-top:8px"><label for="nTables" class="venue">จำนวนโต๊ะ</label><input id="nTables" class="field" type="number" min="1" max="20" value="6" style="width:90px"><button class="btn ghost" id="printQR">พิมพ์ QR</button></div>
+      <div id="qrs" class="qrgrid"></div>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" class="sheet" id="frm">
+    <h2 id="dTitle">ขอเพลง</h2>
+    <div id="customWrap" class="hidden">
+      <label for="cTitle">ชื่อเพลง</label>
+      <input id="cTitle" class="field" maxlength="80">
+      <label for="cArtist">ศิลปิน</label>
+      <input id="cArtist" class="field" maxlength="60">
+    </div>
+    <label for="rName">ชื่อของคุณ</label>
+    <input id="rName" class="field" maxlength="30" placeholder="เช่น พี่เมย์">
+    <label for="rMsg">ฝากข้อความ (ไม่บังคับ)</label>
+    <textarea id="rMsg" class="field" rows="2" maxlength="120" placeholder="เช่น สุขสันต์วันเกิดนะ"></textarea>
+    <div class="row" style="margin-top:16px;justify-content:flex-end">
+      <button type="button" class="btn ghost" id="cancel">ยกเลิก</button>
+      <button type="submit" class="btn" id="send">ส่งคำขอ</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="tdlg">
+  <div class="sheet">
+    <h2>ให้ทิปวงไหม?</h2>
+    <div class="hint">ไม่บังคับ ข้ามได้เลย คำขอเพลงของคุณถูกส่งไปแล้ว</div>
+    <div class="chips tips"><button type="button" class="chip" data-amt="20" aria-pressed="false">฿20</button><button type="button" class="chip" data-amt="50" aria-pressed="false">฿50</button><button type="button" class="chip" data-amt="100" aria-pressed="false">฿100</button></div>
+    <label class="vlabel" for="tCustom">หรือกรอกเอง (บาท)</label>
+    <input id="tCustom" class="field" type="number" min="1" inputmode="numeric">
+    <div id="tQR" class="tqr"></div>
+    <div id="tNote" class="hint"></div>
+    <div class="row" style="margin-top:16px;justify-content:flex-end">
+      <button type="button" class="btn ghost" id="tSkip">ไม่ให้ทิป</button>
+      <button type="button" class="btn" id="tPaid" disabled>โอนแล้ว</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="ndlg">
+  <div class="sheet notes-sheet">
+    <h2 id="nTitle">คอร์ด / เนื้อเพลง</h2>
+    <div class="links">
+      <a id="lkC" target="_blank" rel="noopener noreferrer">ค้นหาคอร์ด</a>
+      <a id="lkL" target="_blank" rel="noopener noreferrer">ค้นหาเนื้อเพลง</a>
+    </div>
+    <label for="nChords">คอร์ด</label>
+    <textarea id="nChords" class="field" rows="6" placeholder="เช่น G | Em | C | D"></textarea>
+    <div class="hint">คอร์ดตั้งต้นของเพลงดังบางเพลงใส่ไว้ให้ ตรวจด้วยหูก่อนเล่นและแก้ได้เลย</div>
+    <label for="nLyrics">เนื้อเพลง / โน้ตส่วนตัว</label>
+    <textarea id="nLyrics" class="field" rows="8" placeholder="วางเนื้อเพลงที่คุณมีสิทธิ์ใช้ หรือเขียนจุดสำคัญของเพลงเอง"></textarea>
+    <div class="hint">บันทึกไว้ตามชื่อเพลง คราวหน้ามีคนขอเพลงนี้อีกจะขึ้นให้อัตโนมัติ (เห็นเฉพาะหน้านักดนตรี)</div>
+    <div class="row" style="margin-top:16px;justify-content:flex-end">
+      <button type="button" class="btn ghost" id="nClose">ปิด</button>
+      <button type="button" class="btn" id="nSave">บันทึก</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script data-file="js/promptpay.js">
+var PP=(function(){
+  function f(id,v){return id+("0"+v.length).slice(-2)+v}
+  function crc(t){var c=0xFFFF;for(var i=0;i<t.length;i++){c^=t.charCodeAt(i)<<8;for(var j=0;j<8;j++)c=(c&0x8000)?((c<<1)^0x1021):(c<<1);c&=0xFFFF}return("000"+c.toString(16).toUpperCase()).slice(-4)}
+  function payload(id,amt){
+    id=String(id||"").replace(/\D/g,"");if(!id)return"";
+    var acc=id.length<=10?f("01","0066"+id.replace(/^0/,"")):f("02",id);
+    var d=f("00","A000000677010111")+acc;
+    var p=f("00","01")+f("01",amt>0?"12":"11")+f("29",d)+f("53","764")+(amt>0?f("54",amt.toFixed(2)):"")+f("58","TH")+"6304";
+    return p+crc(p);
+  }
+  return{payload:payload,crc:crc};
+})();
+</script>
+<script data-file="js/app.js">
+(function(){
+  var SONGS=[
+    ["เพลงรักตอนดึก","คุณกีตาร์","ไทย","ป๊อป"],["ฝนตกที่ริมน้ำ","วงสายลม","ไทย","โฟล์ก"],
+    ["ยังไม่อยากกลับบ้าน","น้ำผึ้ง","ไทย","ป๊อป"],["คนเดียวใต้แสงไฟ","ธนา","ไทย","บัลลาด"],
+    ["Fly Me to the Moon","Frank Sinatra","สากล","แจ๊ส"],["Hotel California","Eagles","สากล","ร็อก"],
+    ["Wonderwall","Oasis","สากล","ร็อก"],["Come Away With Me","Norah Jones","สากล","แจ๊ส"],
+    ["Perfect","Ed Sheeran","สากล","ป๊อป"],["Sweet Child O' Mine","Guns N' Roses","สากล","ร็อก"],
+    ["เมาแล้วโทรหา","บอย","ไทย","ร็อก"],["คืนนี้ไม่มีเธอ","ฟ้าใส","ไทย","บัลลาด"]
+  ];
+  var SEED={"Fly Me to the Moon":"Am7 | Dm7 | G7 | Cmaj7\nFmaj7 | Bm7b5 | E7 | Am7","Hotel California":"Bm | F# | A | E\nG | D | Em | F#","Wonderwall":"Em7 | G | Dsus4 | A7sus4 (capo 2)","Perfect":"G | Em | C | D","Sweet Child O' Mine":"D | C | G | D"};
+  var KEY="songreq-demo-v1";
+  var S={reqs:[],accepting:true,limit:3,seq:1,notes:{}};
+  function getNote(t){var n=S.notes&&S.notes[t];return n||{chords:SEED[t]||"",lyrics:""}}
+  function chordPrev(t){var c=(getNote(t).chords||"").split("\n")[0].trim();return c?'<div class="chordprev">'+esc(c)+'</div>':''}
+  try{var raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+  var $=function(i){return document.getElementById(i)};
+  function esc(t){var d=document.createElement("div");d.textContent=t==null?"":String(t);return d.innerHTML}
+  var table=1,genre="ทั้งหมด",pick=null,isCustom=false;
+
+  var sel=$("tableSel");
+  for(var i=1;i<=20;i++){var o=document.createElement("option");o.value=i;o.textContent="โต๊ะ "+i;sel.appendChild(o)}
+  sel.onchange=function(){table=+sel.value;render()};
+
+  var genres=["ทั้งหมด","ไทย","สากล","ป๊อป","ร็อก","แจ๊ส","บัลลาด","โฟล์ก"];
+  function renderChips(){
+    $("chips").innerHTML=genres.map(function(g){return '<button class="chip" aria-pressed="'+(g===genre)+'" data-g="'+g+'">'+g+'</button>'}).join("");
+    [].forEach.call($("chips").children,function(b){b.onclick=function(){genre=b.dataset.g;render()}});
+  }
+  function mineCount(){return S.reqs.filter(function(r){return r.table===table&&(r.status==="pending"||r.status==="accepted")}).length}
+  function renderSongs(){
+    var q=$("q").value.trim().toLowerCase();
+    var list=SONGS.filter(function(s){
+      var okG=genre==="ทั้งหมด"||s[2]===genre||s[3]===genre;
+      return okG&&(!q||(s[0]+" "+s[1]).toLowerCase().indexOf(q)>-1)});
+    var full=mineCount()>=S.limit,off=!S.accepting||full||S.set.onBreak;
+    $("closedBanner").classList.toggle("hidden",S.accepting&&!full&&!S.set.onBreak);
+    $("closedBanner").textContent=S.set.onBreak?S.set.breakMsg:!S.accepting?"วงปิดรับคำขอชั่วคราว ลองใหม่อีกครั้งหลังจบเซ็ตนี้":"โต๊ะนี้ขอครบ "+S.limit+" เพลงแล้ว รอให้เล่นก่อนแล้วขอเพิ่มได้";
+    $("songs").innerHTML=list.length?list.map(function(s){
+      var idx=SONGS.indexOf(s);
+      return '<div class="song"><div class="t"><b>'+esc(s[0])+'</b><small>'+esc(s[1])+' · '+esc(s[2])+'</small></div><button class="btn" data-i="'+idx+'"'+(off?" disabled":"")+'>ขอเพลง</button></div>'}).join(""):'<div class="empty">ไม่พบเพลงนี้ในลิสต์ ลองพิมพ์ชื่อเองด้านล่าง</div>';
+    [].forEach.call($("songs").querySelectorAll("button[data-i]"),function(b){b.onclick=function(){openDlg(SONGS[+b.dataset.i],false)}});
+    $("custom").disabled=off;
+  }
+  var LABEL={pending:"รอคิว",accepted:"กำลังจะเล่น",played:"เล่นแล้ว",skipped:"วงข้ามเพลงนี้"};
+  function renderMine(){
+    var m=S.reqs.filter(function(r){return r.table===table}).slice().reverse();
+    $("mine").innerHTML=m.length?m.map(function(r){
+      var ahead=S.reqs.filter(function(x){return x.status==="pending"&&x.id<r.id}).length;
+      return '<div class="slip"><b>'+esc(r.title)+'</b> <span class="badge b-'+r.status+'">'+LABEL[r.status]+'</span><div class="meta">'+esc(r.artist||"")+(r.status==="pending"?" · มีคิวก่อนหน้า "+ahead+" เพลง":"")+(r.msg?'<br>“'+esc(r.msg)+'”':"")+tipLine(r)+'</div></div>'}).join(""):'<div class="empty">ยังไม่มีคำขอ เลือกเพลงจากลิสต์ด้านบนได้เลย</div>';
+  }
+  function renderMusician(){
+    var acc=S.reqs.filter(function(r){return r.status==="accepted"});
+    var pen=S.reqs.filter(function(r){return r.status==="pending"}).sort(byRank);
+    var cur=acc[0];
+    $("now").innerHTML=cur?'<div class="now"><div class="meta">เพลงถัดไปที่รับแล้ว</div><div class="display">'+esc(cur.title)+'</div><div class="meta">โต๊ะ '+cur.table+' · '+esc(cur.name||"ไม่ระบุชื่อ")+(cur.msg?' · “'+esc(cur.msg)+'”':"")+'</div>'+chordPrev(cur.title)+'<div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn ghost" style="background:var(--surface);color:var(--ink)" data-n="'+cur.id+'">คอร์ด / เนื้อเพลง</button><button class="btn ghost" style="background:var(--surface);color:var(--ink)" data-a="played" data-id="'+cur.id+'">เล่นแล้ว</button></div></div>':'<div class="empty">ยังไม่มีเพลงที่รับไว้ กด “รับ” จากคิวด้านล่าง</div>';
+    var more=acc.slice(1);
+    $("count").textContent="("+(pen.length+more.length)+")";
+    var items=more.concat(pen);
+    $("queue").innerHTML=items.length?items.map(function(r){
+      return '<div class="q-item"><div><div class="display">'+esc(r.title)+'</div>'+badges(r)+'<div class="meta">'+esc(r.artist||"")+' · โต๊ะ '+r.table+' · '+esc(r.name||"ไม่ระบุชื่อ")+(r.msg?'<br>“'+esc(r.msg)+'”':"")+'</div></div>'+chordPrev(r.title)+'<div><button class="btn ghost" data-n="'+r.id+'">คอร์ด / เนื้อเพลง</button>'+(r.status==="pending"?' <button class="btn ghost" data-mv="-1:'+r.id+'" aria-label="เลื่อนคิวขึ้น">▲</button> <button class="btn ghost" data-mv="1:'+r.id+'" aria-label="เลื่อนคิวลง">▼</button>':'')+'</div><div class="acts">'+
+        (r.status==="pending"?'<button class="btn" data-a="accepted" data-id="'+r.id+'">รับ</button>':'<span class="badge b-accepted" style="align-self:center;justify-self:start">รับแล้ว</span>')+
+        '<button class="btn ghost" data-a="played" data-id="'+r.id+'">เล่นแล้ว</button><button class="btn ghost" data-a="skipped" data-id="'+r.id+'">ข้าม</button></div></div>'}).join(""):'<div class="empty">คิวว่าง รอลูกค้าสแกน QR ที่โต๊ะ</div>';
+    var done=S.reqs.filter(function(r){return r.status==="played"||r.status==="skipped"}).slice().reverse().slice(0,8);
+    $("done").innerHTML=done.length?done.map(function(r){return '<div class="slip" style="opacity:.75"><b>'+esc(r.title)+'</b> <span class="badge b-'+r.status+'">'+LABEL[r.status]+'</span><div class="meta">โต๊ะ '+r.table+'</div></div>'}).join(""):'<div class="empty">ยังไม่มีรายการ</div>';
+    [].forEach.call(document.querySelectorAll("[data-a]"),function(b){b.onclick=function(){setStatus(+b.dataset.id,b.dataset.a)}});
+    [].forEach.call(document.querySelectorAll("[data-n]"),function(b){b.onclick=function(){openNotes(+b.dataset.n)}});
+    [].forEach.call(document.querySelectorAll("[data-mv]"),function(b){b.onclick=function(){var p=b.dataset.mv.split(":");move(+p[1],+p[0])}});
+    $("accepting").checked=S.accepting;$("limitSel").value=String(S.limit);
+  }
+  function setStatus(id,st){S.reqs.forEach(function(r){if(r.id===id)r.status=st});save();render()}
+  function render(){renderChips();renderSongs();renderMine();renderMusician();renderExtra();$("who").textContent=mode==="c"?"โต๊ะ "+table:mode==="m"?"หน้านักดนตรี":"หน้าร้าน"}
+
+  var nd=$("ndlg"),curTitle=null;
+  function openNotes(id){
+    var r=S.reqs.filter(function(x){return x.id===id})[0];if(!r)return;
+    curTitle=r.title;var n=getNote(r.title),q=encodeURIComponent(r.title+" "+(r.artist||""));
+    $("nTitle").textContent=r.title+(r.artist?" – "+r.artist:"");
+    $("nChords").value=n.chords;$("nLyrics").value=n.lyrics;
+    $("lkC").href="https://www.google.com/search?q="+q+"+chords";
+    $("lkL").href="https://www.google.com/search?q="+q+"+lyrics";
+    if(nd.showModal)nd.showModal();else nd.setAttribute("open","");
+  }
+  $("nClose").onclick=function(){nd.close()};
+  $("nSave").onclick=function(){
+    S.notes[curTitle]={chords:$("nChords").value,lyrics:$("nLyrics").value};
+    save();nd.close();toast("บันทึกแล้ว");render();
+  };
+  function tab(c){
+    mode=c;["c","m","v"].forEach(function(k){$("view-"+k).classList.toggle("hidden",k!==c);$("tab-"+k).setAttribute("aria-selected",k===c)});
+    if(c==="v")drawQR();render();
+  }
+  ["c","m","v"].forEach(function(k){$("tab-"+k).onclick=function(){tab(k)}});
+  $("q").oninput=renderSongs;
+
+  var dlg=$("dlg");
+  function openDlg(s,custom){
+    pick=s;isCustom=custom;
+    $("dTitle").textContent=custom?"ขอเพลงนอกลิสต์":"ขอ “"+s[0]+"”";
+    $("customWrap").classList.toggle("hidden",!custom);
+    $("cTitle").value="";$("cArtist").value="";$("rMsg").value="";
+    if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","");
+  }
+  $("custom").onclick=function(){openDlg(null,true)};
+  $("cancel").onclick=function(){dlg.close()};
+  $("frm").onsubmit=function(e){
+    var title=isCustom?$("cTitle").value.trim():pick[0];
+    if(!title){e.preventDefault();$("cTitle").focus();return}
+    if(!S.accepting||S.set.onBreak||mineCount()>=S.limit){toast("ตอนนี้ขอเพิ่มไม่ได้");return}
+    var nid=S.seq;S.reqs.push({t:Date.now(),tip:0,votes:0,id:S.seq++,table:table,title:title,artist:isCustom?$("cArtist").value.trim():pick[1],name:$("rName").value.trim(),msg:$("rMsg").value.trim(),status:"pending"});
+    save();beep();toast("ส่งคำขอแล้ว วงจะเห็นทันที");render();setTimeout(function(){openTip(nid)},0);
+  };
+  $("accepting").onchange=function(){S.accepting=this.checked;save();render()};
+  $("limitSel").onchange=function(){S.limit=+this.value;save();render()};
+  $("sim").onclick=function(){
+    var s=SONGS[Math.floor(Math.random()*SONGS.length)],t=1+Math.floor(Math.random()*20);
+    S.reqs.push({t:Date.now(),id:S.seq++,table:t,title:s[0],artist:s[1],name:"ลูกค้าโต๊ะ "+t,msg:Math.random()>.5?"สุขสันต์วันเกิดนะ":"",status:"pending"});
+    save();beep();render();
+  };
+  function beep(){
+    try{var C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator(),g=c.createGain();
+      o.frequency.value=880;g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.35);
+      o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.36)}catch(e){}
+  }
+  var tt;function toast(m){var d=document.createElement("div");d.className="toast";d.textContent=m;document.body.appendChild(d);clearTimeout(tt);tt=setTimeout(function(){d.remove()},2200)}
+  
+  /* ---- v2: tips, priority queue, break mode, venue tools, stats ---- */
+  var mode="c",tipId=null,tipAmt=0,BASE=SONGS.length;
+  S.set=Object.assign({promptpay:"",band:"",ig:"",minPri:100,onBreak:false,breakMsg:"พักเบรก กลับมาเร็ว ๆ นี้",thanks:"วงขอบคุณมากสำหรับน้ำใจ"},S.set||{});
+  S.extra=S.extra||[];S.voted=S.voted||[];
+  function syncSongs(){SONGS.length=BASE;S.extra.forEach(function(x){SONGS.push(x)})}
+  syncSongs();
+  var hm=/^#table-(\d+)$/.exec(location.hash);
+  if(hm){table=Math.min(20,Math.max(1,+hm[1]));$("tableSel").value=table}
+  $("base").value=location.href.split("#")[0];
+
+  function pri(r){return S.set.minPri>0&&(r.tip||0)>=S.set.minPri?1:0}
+  function byRank(a,b){return(pri(b)-pri(a))||((a.ord||a.id)-(b.ord||b.id))}
+  function badges(r){var h="";if(pri(r))h+='<span class="badge b-accepted">คิวด่วน</span> ';if(r.tip)h+='<span class="badge b-pending">ทิป ฿'+r.tip+'</span> ';if(r.votes)h+='<span class="badge b-played">👍 '+r.votes+'</span>';return h?'<div style="margin:2px 0">'+h+'</div>':''}
+  function tipLine(r){var h="";if(r.tip)h+=" · ทิป ฿"+r.tip+" (แจ้งว่าโอนแล้ว)";if(r.status==="played"&&r.tip)h+="<br>"+esc(S.set.thanks);if(r.status==="pending"||r.status==="accepted")h+='<br><button class="btn ghost" data-tip="'+r.id+'" style="min-height:36px;padding:4px 12px;margin-top:6px">'+(r.tip?"ร่วมทิปเพิ่ม":"ร่วมทิป")+'</button>';return h}
+  function move(id,d){var L=S.reqs.filter(function(r){return r.status==="pending"}).sort(byRank),i=L.findIndex(function(r){return r.id===id}),j=i+d;if(i<0||j<0||j>=L.length)return;var a=L[i],b=L[j],t=a.ord||a.id;a.ord=b.ord||b.id;b.ord=t;save();render()}
+  function bind(sel,fn){[].forEach.call(document.querySelectorAll(sel),function(b){var k=Object.keys(b.dataset)[0];b.onclick=function(){fn(+b.dataset[k])}})}
+  function setv(id,v){var e=$(id);if(e&&document.activeElement!==e)e.value=v}
+
+  var td=$("tdlg");
+  function tipBtns(){[].forEach.call(td.querySelectorAll("[data-amt]"),function(b){b.setAttribute("aria-pressed",+b.dataset.amt===tipAmt)})}
+  function openTip(id){tipId=id;tipAmt=0;$("tQR").innerHTML="";$("tNote").textContent="";$("tCustom").value="";$("tPaid").disabled=true;tipBtns();if(td.showModal)td.showModal();else td.setAttribute("open","")}
+  function setAmt(a){
+    tipAmt=a;tipBtns();var q=$("tQR");q.innerHTML="";$("tPaid").disabled=true;if(!(a>0))return;
+    var pl=PP.payload(S.set.promptpay,a);
+    if(!pl){$("tNote").textContent="วงยังไม่ได้ตั้งค่า PromptPay (ตั้งที่แท็บ ร้าน)";return}
+    $("tPaid").disabled=false;
+    $("tNote").textContent="สแกนจ่าย ฿"+a+" ผ่านแอปธนาคาร เงินเข้าบัญชีวงโดยตรง แล้วกด “โอนแล้ว”"+(S.set.minPri>0&&a>=S.set.minPri?" · คำขอนี้จะขึ้นคิวด่วน":"");
+    try{new QRCode(q,{text:pl,width:200,height:200})}catch(e){q.textContent=pl}
+  }
+  [].forEach.call(td.querySelectorAll("[data-amt]"),function(b){b.onclick=function(){$("tCustom").value="";setAmt(+b.dataset.amt)}});
+  $("tCustom").oninput=function(){setAmt(Math.max(0,Math.floor(+this.value||0)))};
+  $("tSkip").onclick=function(){td.close()};
+  $("tPaid").onclick=function(){var r=S.reqs.filter(function(x){return x.id===tipId})[0];if(r&&tipAmt>0){r.tip=(r.tip||0)+tipAmt;save();toast("ขอบคุณที่ให้ทิป")}td.close();render()};
+
+  function stats(){
+    var c={},h={},tips=0,pl=0,sk=0;
+    S.reqs.forEach(function(r){c[r.title]=(c[r.title]||0)+1;tips+=r.tip||0;if(r.status==="played")pl++;if(r.status==="skipped")sk++;if(r.t){var k=new Date(r.t).getHours();h[k]=(h[k]||0)+1}});
+    var top=Object.keys(c).sort(function(a,b){return c[b]-c[a]}).slice(0,5).map(function(k){return[k,c[k]]});
+    var hk=Object.keys(h).sort(function(a,b){return h[b]-h[a]})[0];
+    return{top:top,tips:tips,pl:pl,sk:sk,hour:hk==null?null:[+hk,h[hk]],total:S.reqs.length};
+  }
+  function topHtml(st){return st.top.length?'<ol>'+st.top.map(function(t){return'<li>'+esc(t[0])+' <span class="venue">('+t[1]+' คำขอ)</span></li>'}).join("")+'</ol>':'<div class="empty">ยังไม่มีข้อมูล</div>'}
+  function renderExtra(){
+    var st=stats(),s=S.set;
+    $("band").textContent=s.band?"วง "+s.band+(s.ig?" · IG "+s.ig:"")+" · เล่นทุกคืน 20:30":"ร้านตัวอย่าง · วงเริ่มเล่นทุกคืน 20:30";
+    var L=S.reqs.filter(function(r){return r.status==="pending"&&r.table!==table}).sort(byRank).slice(0,8);
+    $("board").innerHTML=L.length?L.map(function(r){var v=S.voted.indexOf(r.id)>-1;return'<div class="song"><div class="t"><b>'+esc(r.title)+'</b><small>โต๊ะ '+r.table+(r.votes?' · 👍 '+r.votes:'')+'</small></div><button class="btn ghost" data-vote="'+r.id+'"'+(v?" disabled":"")+'>'+(v?"โหวตแล้ว":"👍 อยากฟัง")+'</button></div>'}).join(""):'<div class="empty">ยังไม่มีคิวจากโต๊ะอื่น</div>';
+    bind("[data-vote]",function(id){var r=S.reqs.filter(function(x){return x.id===id})[0];if(r&&S.voted.indexOf(id)<0){r.votes=(r.votes||0)+1;S.voted.push(id);save();render()}});
+    bind("[data-tip]",openTip);
+    $("sum").innerHTML='<div class="slip"><b>เล่นแล้ว '+st.pl+' เพลง · ข้าม '+st.sk+' · ขอทั้งหมด '+st.total+'</b><div class="meta">ทิปที่ลูกค้าแจ้งว่าโอน ฿'+st.tips+' (ระบบไม่ได้ตรวจยอดจริง ให้เช็กในแอปธนาคาร)'+(st.hour?'<br>ช่วงที่ขอเยอะสุด '+st.hour[0]+':00–'+st.hour[0]+':59 ('+st.hour[1]+' คำขอ)':'')+'</div></div>'+topHtml(st)+'<button class="btn ghost" id="newNight">เริ่มคืนใหม่ (ล้างคิว)</button>';
+    $("newNight").onclick=function(){var b=this;if(b.dataset.s){S.reqs=[];S.seq=1;S.voted=[];save();render();toast("เริ่มคืนใหม่แล้ว")}else{b.dataset.s=1;b.textContent="กดอีกครั้งเพื่อยืนยัน";setTimeout(function(){b.dataset.s="";b.textContent="เริ่มคืนใหม่ (ล้างคิว)"},3000)}};
+    $("top").innerHTML=topHtml(st);
+    $("onBreak").checked=s.onBreak;
+    setv("sBand",s.band);setv("sIg",s.ig);setv("sPP",s.promptpay);setv("sMin",s.minPri);setv("sBreak",s.breakMsg);
+    $("extras").innerHTML=S.extra.map(function(x,i){return'<div class="song"><div class="t"><b>'+esc(x[0])+'</b><small>'+esc(x[1])+'</small></div><button class="btn ghost" data-rm="'+i+'">ลบ</button></div>'}).join("");
+    bind("[data-rm]",function(i){S.extra.splice(i,1);syncSongs();save();render()});
+  }
+  function bindSet(id,key,num){$(id).oninput=function(){S.set[key]=num?Math.max(0,+this.value||0):this.value.trim();save()}}
+  bindSet("sBand","band");bindSet("sIg","ig");bindSet("sPP","promptpay");bindSet("sMin","minPri",1);bindSet("sBreak","breakMsg");
+  $("onBreak").onchange=function(){S.set.onBreak=this.checked;save();render()};
+  $("addSong").onclick=function(){var t=$("xT").value.trim();if(!t){$("xT").focus();return}S.extra.push([t,$("xA").value.trim(),$("xL").value,$("xG").value]);syncSongs();$("xT").value="";$("xA").value="";save();render()};
+  function drawQR(){
+    var n=Math.min(20,Math.max(1,+$("nTables").value||1)),base=($("base").value||location.href).split("#")[0],h="";
+    for(var i=1;i<=n;i++)h+='<div class="qrcard"><div id="qr-'+i+'"></div><b>โต๊ะ '+i+'</b></div>';
+    $("qrs").innerHTML=h;
+    for(i=1;i<=n;i++){try{new QRCode($("qr-"+i),{text:base+"#table-"+i,width:128,height:128})}catch(e){$("qr-"+i).textContent="#table-"+i}}
+  }
+  $("nTables").onchange=drawQR;$("base").onchange=drawQR;$("printQR").onclick=function(){window.print()};
+  window.addEventListener("storage",function(e){
+    if(e.key!==KEY||!e.newValue)return;
+    try{var n=S.reqs.length;S=Object.assign(S,JSON.parse(e.newValue));syncSongs();if(S.reqs.length>n&&mode==="m")beep();render()}catch(_){}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
